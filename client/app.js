@@ -1,21 +1,39 @@
-const input = document.querySelector('input');
-const button = document.querySelector('button');
-const paragraph = document.querySelector('p');
+const btnIndex = document.querySelector('#btn-index');
+const email = document.querySelector('input[type="email"]');
+const password = document.querySelector('input[type="password"]');
+const btnLogin = document.querySelector('#btn-login');
+const btnHome = document.querySelector('#btn-home');
 
-button.addEventListener('click', async (event) => {
-  event.preventDefault();
+if (btnIndex) {
+  btnIndex.addEventListener('click', () => (
+    window.location.href = './pages/login.html'
+  ));
+}
 
-  const inputValue = input.value;
-  input.value = '';
+if (btnLogin) {
+  btnLogin.addEventListener('click', async (event) => {
+    event.preventDefault();
+  
+    const emailValue = email.value;
+    const passwordValue = password.value;
+  
+    const response = await fetch('http://localhost:3000/users');
+    const data = await response.json();
+  
+    const user = data.find((user) => (
+      user.email === emailValue && user.password === passwordValue
+    ));
+  
+    if (!user) return window.alert('Email e/ou senha inválidos.');
+  
+    window.alert('Acesso permitido.')
+  
+    window.location.href = './home.html';
+  });
+}
 
-  const response = await fetch('http://localhost:3000/users');
-  const data = await response.json();
-
-  const user = data.find(user => user.email === inputValue);
-
-  if (!user) {
-    return paragraph.textContent = `Usuário não encontrado.`;
-  }
-
-  paragraph.textContent = `Usuário ${user.name} encontrado.`;
-});
+if (btnHome) {
+  btnHome.addEventListener('click', () => (
+    window.location.href = './login.html'
+  ));
+}
